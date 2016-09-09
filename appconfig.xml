@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<AppConfiguration>
+<DB_server>localhost</DB_server>
+<DB_server_port>27017</DB_server_port>
+<DB_name>gmcs_2</DB_name>
+<GeoPrefix>ISR</GeoPrefix>
+<StartUID>10000000</StartUID>
+</AppConfiguration>
+
+
