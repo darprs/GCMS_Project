@@ -3,23 +3,21 @@ var router = express.Router();
 var generateName = require('sillyname');
 
 /* GET home page. */
-router.get('/', function(req, res) {
+router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
 function clear_collections(){
     UID.remove({}, function(err) {
-        if (err) {console.log(err);}
         console.log('UID collection cleared')
     });
     Item.remove({}, function(err) {
-        if (err) {console.log(err);}
         console.log('Item collection cleared')
     });
 }
 
 /** setup system. **/
-router.get('/clean_setup', function(req, res) {
+router.get('/clean_setup', function(req, res, next) {
 
     clear_collections();
     //User.index({ first: 1, last: -1 }, { unique: true })
@@ -87,15 +85,14 @@ function getnewuid(callback){
 
 
 /** function get root UID **/
-function getrootUID()
-{
+function getrootUID(){
     return app_config.geoPrefix + app_config.startUID;
-}
+};
 
 
 
 /** GET new UID test**/
-router.get('/getnewuid',function(req, res) {
+router.get('/getnewuid',function(req, res, next) {
     getnewuid(function (value) {
         res.render('service', { title: value });
     })
@@ -104,7 +101,7 @@ router.get('/getnewuid',function(req, res) {
 
 
 /** GET testItemCreation**/
-router.get('/createRandomRootfolder', function(req, res) {
+router.get('/createRandomRootfolder', function(req, res, next) {
 
     var sillyName = generateName();
     getnewuid(function (new_id) {
@@ -199,6 +196,7 @@ router.get('/:itemUID/srn', function(req, res) {
         res.send(updated_item);
     });
 });
+
 
 
 
