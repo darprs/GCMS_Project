@@ -86,20 +86,27 @@ router.get('/:itemUID/test', function(req, res) {
     //     res.send(f[0]);
     // });
 
-    Item.aggregate
-    ( [ {$match:{item_parent_uid:req.params.itemUID}},
-        {$sort: {"item_uid":1,"item_version":-1}},
-        { $group : { _id : "$item_uid" ,
-            item_uid:{$first:"$item_uid"},
-            item_version: {$first:"$item_version"},
-            item_name: {$first:"$item_name"},
-            item_parent_uid:{$first:"$item_parent_uid"}
-        }
-        },{$sort: {"_id":1}}
-    ],function (err,result) {
-        if (err){res.send(err)}
-        else { res.send(result);}
+    // Item.aggregate
+    // ( [ {$match:{item_parent_uid:req.params.itemUID}},
+    //     {$sort: {"item_uid":1,"item_version":-1}},
+    //     { $group : { _id : "$item_uid" ,
+    //         item_uid:{$first:"$item_uid"},
+    //         item_version: {$first:"$item_version"},
+    //         item_name: {$first:"$item_name"},
+    //         item_parent_uid:{$first:"$item_parent_uid"}
+    //     }
+    //     },{$sort: {"_id":1}}
+    // ],function (err,result) {
+    //     if (err){res.send(err)}
+    //     else { res.send(result);}
+    // });
+    ff.get_childs_by_UID(req.params.itemUID, function (childs) {
+        console.log(req.path);
+        res.render('items_list', {
+            "itemsList" : childs
+        });
     });
+
 });
 
 
