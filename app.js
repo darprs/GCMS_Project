@@ -14,6 +14,7 @@ require('console-stamp')(console, '[HH:MM:ss.l]');
 
 
 var routes = require('./routes/index');
+var farm = require('./routes/farm.js');
 
 var app = express();
 
@@ -68,9 +69,7 @@ read_configuration_file_to_appconfig(__dirname + '/appconfig.xml',mongoose_conne
 
 
 app.use('/', routes);
-
-
-
+app.use('/farm',farm);
 
 
 
