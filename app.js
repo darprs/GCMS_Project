@@ -9,7 +9,6 @@ global.mongoose = require('mongoose');
 var models = require('./mongoose_models.js');
 var Schema = mongoose.Schema;
 var xmlreader = require('xmlreader');
-require('./functions');
 require('console-stamp')(console, '[HH:MM:ss.l]');
 
 

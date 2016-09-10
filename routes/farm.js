@@ -63,7 +63,6 @@ router.get('/:itemUID/srn', function(req, res) {
 
 
 
-
 router.get('/:itemUID/sp/:parentUID', function(req, res){
     if (req.params.itemUID == ff.getrootUID())
     {
