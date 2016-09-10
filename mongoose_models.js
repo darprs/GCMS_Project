@@ -24,3 +24,11 @@ global.Item = mongoose.model('Item',
         versionKey: false
     }
 );
+
+global.Farm = mongoose.model('Farm',
+    {
+        name:String,
+        hostname:String,
+        port:Number
+    }
+);

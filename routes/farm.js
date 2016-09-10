@@ -7,8 +7,9 @@ var router = express.Router();
 var generateName = require('sillyname');
 
 
-
+//system setup - tested
 router.get('/clean_setup', function(req, res) {
+    console.log(req.url);
     ff.clear_collections();
     ff.setup_collections(function (result) {
         res.render('service', {title: result});
@@ -16,63 +17,79 @@ router.get('/clean_setup', function(req, res) {
 });
 
 
-
-/** GET new UID test**/
-router.get('/getnewuid',function(req, res) {
-    ff.getnewuid(function (value) {
-        res.render('service', { title: value });
-    })
-});
-
-
-
-/** GET testItemCreation**/
+//GET testItemCreation - tested
 router.get('/createRandomRootfolder', function(req, res) {
-
+    console.log(req.url);
     var sillyName = generateName();
-    ff.create_new_item(sillyName,ff.getrootUID(),0,function(created_item) {
+    ff.new_item(sillyName,ff.getrootUID(),0,function(created_item) {
         res.render('service', {title: created_item});
     });
 });
 
 
-
+//get item - tested
 router.get('/:itemUID', function(req, res) {
-    ff.get_item_by_UID(req.params.itemUID, function (found_item) {
+    console.log(req.url);
+    ff.get_item(req.params.itemUID,null, function (found_item) {
         res.send(found_item);
     });
 });
 
-
-router.get('/:itemUID/gc', function(req, res) {
-    ff.get_childs_by_UID(req.params.itemUID, function (childs) {
-        res.send(childs);
-    });
-});
-
-
-//GET item set rundom name (SRN)
+//GET item set rundom name (SRN) - tested
 router.get('/:itemUID/srn', function(req, res) {
-    ff.set_item_random_name_by_UID(req.params.itemUID, function (updated_item) {
+    console.log(req.url);
+    ff.set_item_random_name(req.params.itemUID, function (updated_item) {
         res.send(updated_item);
     });
 });
 
 
+//get item by version - tested
+router.get('/:itemUID/v/:itemVer', function(req, res) {
+    console.log(req.url);
+    ff.get_item(req.params.itemUID,req.params.itemVer ,function (found_item) {
+        res.send(found_item);
+    });
+});
+
+
+//get childs - tested
+router.get('/:itemUID/gc', function(req, res) {
+    console.log(req.url);
+    ff.get_childs(req.params.itemUID, function (childs) {
+        res.send(childs);
+    });
+});
+
+
+//get childs visual - tested
+router.get('/:itemUID/gcv', function(req, res) {
+    console.log(req.url);
+    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    ff.get_childs(req.params.itemUID, function (childs) {
+        ff.get_item(req.params.itemUID, null, function (folder) {
+            res.render('items_list', {
+                "itemsList" : childs , "folder" : folder , "req":req , "fullUrl":fullUrl
+            });
+        })
+
+    });
+});
 
 
 
-
+//set parent for item - tested
 router.get('/:itemUID/sp/:parentUID', function(req, res){
-    if (req.params.itemUID == ff.getrootUID())
+    console.log(req.url);
+    if (req.params.itemUID == ff.getrootUID()) // no change for root
     {
-        ff.get_item_by_UID(req.params.itemUID, function (found_item) {
+        ff.get_item(req.params.itemUID,null, function (found_item) {
             res.send(found_item);
         });
     }
     else
         {
-            ff.set_item_parent_by_UID(req.params.itemUID ,req.params.parentUID,function(value) {
+            ff.set_item_parent(req.params.itemUID ,req.params.parentUID,function(value) {
                 res.send(value);
             });
         }
@@ -81,13 +98,13 @@ router.get('/:itemUID/sp/:parentUID', function(req, res){
 
 
 router.get('/:itemUID/test', function(req, res) {
-    ff.get_childs_by_UID(req.params.itemUID, function (childs) {
+    console.log(req.url);
+    ff.get_childs(req.params.itemUID, function (childs) {
         console.log(req.path);
         res.render('items_list', {
             "itemsList" : childs
         });
     });
-
 });
 
 
