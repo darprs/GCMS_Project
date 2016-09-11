@@ -65,11 +65,12 @@ router.get('/:itemUID/gc', function(req, res) {
 //get childs visual - tested
 router.get('/:itemUID/gcv', function(req, res) {
     console.log(req.url);
-    var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+
     ff.get_childs(req.params.itemUID, function (childs) {
         ff.get_item(req.params.itemUID, null, function (folder) {
+            var parentUrl = (req.protocol + '://' + req.get('host') + req.originalUrl).replace(folder.item_uid,folder.item_parent_uid);
             res.render('items_list', {
-                "itemsList" : childs , "folder" : folder , "req":req , "fullUrl":fullUrl
+                "itemsList" : childs , "folder" : folder , "parentUrl":parentUrl
             });
         })
 

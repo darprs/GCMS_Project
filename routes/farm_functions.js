@@ -87,7 +87,7 @@ module.exports.new_item = function (name,parent,type,callback){
             {
                 item_uid:new_id,
                 item_name: name,
-                item_version:0,
+                item_version:1,
                 item_parent_uid:parent,
                 item_type:type
             }

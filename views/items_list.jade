@@ -4,13 +4,12 @@
 extends layout
 
 block content
+    h1.
+    a.link(href=parentUrl)=(folder.item_parent_uid)
 
-        //a.link(href="http://google.com") Google
-    //a.link(href = fullUrl)=(folder.item_uid +'   '+ folder.item_name)
-        // !{folder.item_name}  !{req.url}  !{fullUrl}
     ul
         each item, i in locals.itemsList
             li
-                a.link(href="http://localhost:8080/farm/" + item.item_uid +'/gcv')=(item.item_uid +'   '+ item.item_name)
+                a.link(href= "http://localhost:8080/farm/" + item.item_uid +'/gcv')=(item.item_uid +'   '+ item.item_name + ' version:' + item.item_version)
 
 
