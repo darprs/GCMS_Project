@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var ff = require('./farm_functions.js');
 
 //all files for farm services served by farm.js and accessable using: http://localhost:8080/farm/
 
@@ -16,13 +17,13 @@ router.get('/', function(req, res, next) {
 
 router.get('/get_all', function(req, res)
 {
-      ff.get_all(function (all) {
+      get_all(function (all) {
             res.send(all);
       });
 });
 
 
-module.exports.get_all = function(callback)
+function get_all(callback)
 {
       console.log('\n Daria testing in functions');
 
@@ -40,7 +41,7 @@ module.exports.get_all = function(callback)
                 if (all.length == 0)
                 {
                       console.log('\n Daria - ERORR!!!');
-                      ff.get_all(callback);
+                      get_all(callback);
                 }
                 else {
                       console.log('\n Daria - All found');
@@ -68,6 +69,9 @@ module.exports.get_all = function(callback)
  };
 
  */
+
+
+
 
 
 module.exports = router;

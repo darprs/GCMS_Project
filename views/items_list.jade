@@ -5,7 +5,7 @@ extends layout
 
 block content
     h1.
-    a.link(href=parentUrl)=(folder.item_parent_uid)
+    a.link(href=parentUrl)=("Parent:" + folder.item_parent_uid)
 
     ul
         each item, i in locals.itemsList

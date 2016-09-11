@@ -10,7 +10,7 @@ var models = require('./mongoose_models.js');
 var Schema = mongoose.Schema;
 var xmlreader = require('xmlreader');
 require('console-stamp')(console, '[HH:MM:ss.l]');
-
+global.farms = ["http://localhost:8080/farm/","http://localhost:8090/farm/"];
 
 var routes = require('./routes/index');
 var farm = require('./routes/farm.js');

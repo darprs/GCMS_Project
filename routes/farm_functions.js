@@ -2,9 +2,12 @@
  * Created by master on 09/09/16.
  */
 
+
 var generateName = require('sillyname');
 var ff = require('./farm_functions.js');
 
+//node-rest-client
+var Client = require('node-rest-client').Client;
 
 //system function
 module.exports.clear_collections = function (){
@@ -76,7 +79,7 @@ module.exports.getnewuid = function (callback){
 /** function get root UID **/
 module.exports.getrootUID = function ()
 {
-    return app_config.geoPrefix + app_config.startUID;
+    return "GLB" + app_config.startUID;
 };
 
 
@@ -277,4 +280,9 @@ module.exports.test_item_exist = function(uid,puid,callback) {
             callback(uid,puid,false);
         }
     });
+};
+
+
+module.exports.get_item_tree = function(uid,callback) {
+    callback(uid);
 };
