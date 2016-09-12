@@ -50,6 +50,22 @@ function get_all(callback)
           });
 };
 
+
+
+
+
+/* Download File */
+
+router.get('/home/darprs/GCMS/ISR/Folder2/Folder3/Test.txt', function(req, res)
+{
+    res.sendFile('/home/darprs/GCMS/ISR/Folder2/Folder3/Test.txt');
+
+});
+
+
+
+
+
 /*
  module.exports.get_all = function(callback)
  {

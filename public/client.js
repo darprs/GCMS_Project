@@ -35,8 +35,29 @@ $("#Entry_Btn_Login").click(function(){
         $('#MyTree').jstree({ 'core' : {'data': res_json } });
 
         $("#Entry_Btn_Login").hide();
+
+
+
+        /* Download File */
+
+
+        var iframe = document.getElementById("downloadFrame");
+        iframe .src = "/home/darprs/GCMS/ISR/Folder2/Folder3/Test.txt";
+
+
+
+
+
     });
 });
+
+
+
+
+
+
+
+//  /home/darprs/GCMS/ISR/Folder2/Folder3/Test.txt
 
 
 

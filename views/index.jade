@@ -10,7 +10,6 @@ html(lang='en')
     script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
     link(rel='stylesheet', href='jtree/dist/themes/default/style.min.css')
     script(src='jtree/dist/jstree.min.js')
-
   body
     .container-fluid
       .row
@@ -20,4 +19,5 @@ html(lang='en')
             #MyTree
             ul#my_db_list
               a#Entry_Btn_Login.btn.btn-primary.btn-large(href='#') View all files
+            iframe#downloadFrame(style='display:none')
     script(src='client.js')
