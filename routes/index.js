@@ -48,7 +48,7 @@ function get_all(callback)
                       callback(all);
                 }
           });
-};
+}
 
 
 
@@ -63,6 +63,34 @@ router.get('/home/darprs/GCMS/ISR/Folder2/Folder3/Test.txt', function(req, res)
 });
 
 
+/* Upload File */
+
+router.post('/upload', function(req, res)
+{
+    var sampleFile;
+
+    if (!req.files)
+    {
+        res.send('No files were uploaded.');
+        return;
+    }
+
+    sampleFile = req.files.sampleFile;
+
+    //TODO: define path
+
+    sampleFile.mv('/home/darprs/GCMS/ISR/test.txt', function(err)
+    {
+        if (err)
+        {
+            res.status(500).send(err);
+        }
+        else
+        {
+            res.send('File uploaded!');
+        }
+    });
+});
 
 
 

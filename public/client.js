@@ -28,29 +28,56 @@ $("#Entry_Btn_Login").click(function(){
         tree = tree.substring(0, len-1);
         tree += ' ]';
 
-        console.log(tree);
+        //console.log(tree);
 
         res_json = JSON.parse(tree);
 
         $('#MyTree').jstree({ 'core' : {'data': res_json } });
 
         $("#Entry_Btn_Login").hide();
-
-
-
-        /* Download File */
-
-
-        var iframe = document.getElementById("downloadFrame");
-        iframe .src = "/home/darprs/GCMS/ISR/Folder2/Folder3/Test.txt";
-
-
-
-
-
     });
 });
 
+
+$("#download_button").click(function() {
+
+    /* Download File */
+
+    var iframe = document.getElementById("downloadFrame");
+    iframe.src = "/home/darprs/GCMS/ISR/Folder2/Folder3/Test.txt";
+
+});
+
+/*
+$("#upload_button").click(function() {
+
+    /* Upload File */
+
+/*
+    var formData = new FormData($('form')[0]);
+    $.ajax({
+        url: 'upload.php',  //Server script to process data
+        type: 'POST',
+        xhr: function() {  // Custom XMLHttpRequest
+            var myXhr = $.ajaxSettings.xhr();
+            if(myXhr.upload){ // Check if upload property exists
+                myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
+            }
+            return myXhr;
+        },
+        //Ajax events
+        beforeSend: beforeSendHandler,
+        success: completeHandler,
+        error: errorHandler,
+        // Form data
+        data: formData,
+        //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+
+});
 
 
 

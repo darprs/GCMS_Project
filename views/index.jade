@@ -20,4 +20,7 @@ html(lang='en')
             ul#my_db_list
               a#Entry_Btn_Login.btn.btn-primary.btn-large(href='#') View all files
             iframe#downloadFrame(style='display:none')
+            form#uploadForm(ref='uploadForm', action='http://localhost:8080/upload', method='post', enctype='multipart/form-data')
+              input(type='file', name='sampleFile')
+              input(type='submit', value='Upload')
     script(src='client.js')

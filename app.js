@@ -11,11 +11,14 @@ var Schema = mongoose.Schema;
 var xmlreader = require('xmlreader');
 require('console-stamp')(console, '[HH:MM:ss.l]');
 global.farms = ["http://localhost:8080/farm/","http://localhost:8090/farm/"];
+var fileUpload = require('express-fileupload');
 
 var routes = require('./routes/index');
 var farm = require('./routes/farm.js');
 
 var app = express();
+
+app.use(fileUpload());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
