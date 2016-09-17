@@ -7,27 +7,46 @@
 var app = require('../app');
 var debug = require('debug')('gcms:server');
 var http = require('http');
+var fs = require('fs');
+
+require('console-stamp')(console, '[HH:MM:ss.l]'); //change logging
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '8080');
-app.set('port', port);
+//pavel - extend app object - add config object
+var server = {};
+var path = __dirname + '/port.json';
+fs.readFile( path, function (err, file) {
+    if (err) {
+        throw err;
+    }
+    else {
+        var conf = JSON.parse(file);
+        console.log("Using port ", conf["app_Port"], " from : ",path);
 
-/**
- * Create HTTP server.
- */
+        var port = normalizePort(process.env.PORT || conf["app_Port"]);
+        app.set('port', port);
 
-var server = http.createServer(app);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+        /**
+         * Create HTTP server.
+         */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+        server = http.createServer(app);
+
+        /**
+         * Listen on provided port, on all network interfaces.
+         */
+
+        server.listen(port);
+        server.on('error', onError);
+        server.on('listening', onListening);
+    }
+
+
+});
 
 /**
  * Normalize a port into a number, string, or false.
@@ -88,3 +107,7 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+
+
+

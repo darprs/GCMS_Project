@@ -10,17 +10,17 @@ var express = require('express');
 global.UID = mongoose.model('UID',
     {
         geo_prefix:String,
-        ID:Number,
-        versionKey: false
+        ID:Number
     });
 
 global.Item = mongoose.model('Item',
     {
-        item_uid:{ type: String, index: true },
-        item_name:{ type: String, index: true },
-        item_version:Number,
-        item_parent_uid:{ type: String, index: true },
-        item_type:Number, //0  - folder , 1 document
+        item_uid:{ type: String, index: true ,required: true},
+        item_name:{ type: String, index: true ,required: true},
+        item_version:{type:Number, required: true},
+        item_parent_uid:{ type: String, index: true ,required: true},
+        item_type:{type:Number, required: true}, //0  - folder , 1 document
+        item_content:String,
         versionKey: false
     }
 );

@@ -4,18 +4,39 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var fs = require('fs');
 global.mongoose = require('mongoose');
 var models = require('./mongoose_models.js');
 var Schema = mongoose.Schema;
-var xmlreader = require('xmlreader');
 require('console-stamp')(console, '[HH:MM:ss.l]');
-global.farms = ["http://localhost:8080/farm/","http://localhost:8090/farm/"];
+var fs = require('fs');
 
 var routes = require('./routes/index');
 var farm = require('./routes/farm.js');
+var api = require('./routes/api.js');
 
-var app = express();
+
+
+
+
+var app = express()  ,
+    stylus = require('stylus')
+    , nib = require('nib');
+
+function compile(str, path) {
+    return stylus(str)
+        .set('filename', path)
+        .use(nib())
+}
+
+app.use(stylus.middleware(
+    { src: __dirname + '/public'
+        , compile: compile
+    }
+))
+
+
+global.app_config = {};
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,46 +51,45 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-//add global config object
-global.app_config = {};
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
+//app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
 
-//read config xml to app_config object
-function read_configuration_file_to_appconfig (config_path, callback){
+
+function init_app(config_path,callback) {
     console.log("Trying to read configuration from " + config_path);
-    fs.readFile( config_path, function (err, file) {
+    fs.readFile(config_path, function (err, file) {
         if (err) {
             throw err;
         }
         else {
-            xmlreader.read(file.toString(), function (err, res) {
-                if (err) return console.log(err);
-                else {
-                    app_config.db_server = res.AppConfiguration.DB_server.text();
-                    app_config.db_port = res.AppConfiguration.DB_server_port.text();
-                    app_config.db_name = res.AppConfiguration.DB_name.text();
-                    app_config.geoPrefix = res.AppConfiguration.GeoPrefix.text();
-                    app_config.startUID = res.AppConfiguration.StartUID.text();
-                    console.log("Configuration retreived : " + app_config.db_server + ':' + app_config.db_port + '/' + app_config.db_name);
-                    callback();
-                }
-            });
+            console.log("Using configuratgion from : ", config_path);
+            var conf = JSON.parse(file);
+            app_config.DB_server = conf["DB_server"];
+            app_config.DB_server_port = parseInt(conf["DB_server_port"]);
+            app_config.DB_name = conf["DB_name"];
+            app_config.GeoPrefix = conf["GeoPrefix"];
+            app_config.StartUID = conf["StartUID"];
+            app_config.farms = conf["farms"];
+            console.log(app_config);
+            callback();
         }
     });
-}
-
+};
 
 function mongoose_connect() {
-    con_str = 'mongodb://' + app_config.db_server + ':' + app_config.db_port + '/' + app_config.db_name;
+    con_str = 'mongodb://' + app_config.DB_server + ':' + app_config.DB_server_port  + '/' + app_config.DB_name;
     mongoose.connect(con_str);
     console.log('Connected via Mongoose to :' , con_str);
 }
 
-read_configuration_file_to_appconfig(__dirname + '/appconfig.xml',mongoose_connect);
+init_app(__dirname + '/configuration.json',mongoose_connect);
+
 
 
 app.use('/', routes);
 app.use('/farm',farm);
-
+app.use('/api',api);
 
 
 // catch 404 and forward to error handler
@@ -102,6 +122,8 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+
 
 
 module.exports = app;
