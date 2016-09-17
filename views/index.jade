@@ -10,16 +10,17 @@ html(lang='en')
     script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
     link(rel='stylesheet', href='jtree/dist/themes/default/style.min.css')
     script(src='jtree/dist/jstree.min.js')
-
   body
     .container-fluid
       .row
         .col-md-12
           h3.text-center Welcome to GCMS system
           .jumbotron
+            #MyTree
             ul#my_db_list
-            p
-              a#Entry_Btn_Login.btn.btn-primary.btn-large(href='#') Load all items
-              #MyTree
-
+              a#Entry_Btn_Login.btn.btn-primary.btn-large(href='#') View all files
+            iframe#downloadFrame(style='display:none')
+            form#uploadForm(ref='uploadForm', action='http://localhost:8080/upload', method='post', enctype='multipart/form-data')
+              input(type='file', name='sampleFile')
+              input(type='submit', value='Upload')
     script(src='client.js')
