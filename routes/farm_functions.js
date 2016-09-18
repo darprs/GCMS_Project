@@ -86,15 +86,18 @@ module.exports.getrootUID = function (){
 
 
 
-module.exports.new_item = function (name,parent,content,callback){
+module.exports.new_item = function (uid ,name,version,parent,content,callback){
     ff.getnewuid(function (new_id) {
         var typ = 0;
+        var ver = 1;
         if (content != null ){typ = 1 }
+        if (version != null ){ver = 1 }
+        if (uid != null) {new_id = uid};
         var testitem = new Item(
             {
                 item_uid:new_id,
                 item_name: name,
-                item_version:1,
+                item_version:ver,
                 item_parent_uid:parent,
                 item_type:typ,
                 item_content:content
@@ -159,66 +162,99 @@ module.exports.get_item = function (uid,ver,callback){
 
 
 //set item
-module.exports.set_item = function(uid,name, parent_uid, callback) {
+// module.exports.set_item = function(uid,name, parent_uid, callback) {
+//     console.log('Updating ', uid, ' to ', name, ' and parent :', parent_uid);
+//
+//     ff.get_item(uid, null, function (found_item) {
+//         if (uid == ff.getrootUID()) {
+//             callback(found_item)
+//         } //not updating root foldar ever
+//         else {
+//             found_item = found_item[0];
+//             //prepare new info set
+//             var new_parent = "";
+//             var new_name = "";
+//             if (!parent_uid) {
+//                 new_parent = found_item.item_parent_uid;
+//             }
+//             else {
+//                 new_parent = parent_uid;
+//             }
+//             if (!name) {
+//                 new_name = found_item.item_name;
+//             }
+//             else {
+//                 new_name = name;
+//             }
+//
+//             //set last one as own child
+//             Item.findOneAndUpdate({
+//                 item_uid: {$eq: uid},
+//                 item_version: {$eq: found_item.item_version}
+//             }, {$set: {item_parent_uid: uid}}, {new: true}, function (err, result) {
+//                 if (err) {
+//                     callback(err)
+//                 }
+//                 else {
+//                     var new_version = new Item(
+//                         {
+//                             item_uid: uid,
+//                             item_name: new_name,
+//                             item_version: result.item_version + 1,
+//                             item_parent_uid: new_parent,
+//                             item_type: result.item_type
+//                         }
+//                     );
+//
+//                     new_version.save(function (err, updated) {
+//                         if (err) {
+//                             console.log(err);
+//                             callback(err);
+//                         } else {
+//
+//                             console.log('Item saved successfully:', updated);
+//                             callback(updated);
+//                         }
+//                     });
+//                 }
+//             });
+//         }
+//     });
+// };
+
+module.exports.set_item_name = function(old_item,name, callback) {
     console.log('Updating ', uid, ' to ', name, ' and parent :', parent_uid);
-
-    ff.get_item(uid, null, function (found_item) {
-        if (uid == ff.getrootUID()) {
-            callback(found_item)
-        } //not updating root foldar ever
-        else {
-            found_item = found_item[0];
-            //prepare new info set
-            var new_parent = "";
-            var new_name = "";
-            if (!parent_uid) {
-                new_parent = found_item.item_parent_uid;
-            }
-            else {
-                new_parent = parent_uid;
-            }
-            if (!name) {
-                new_name = found_item.item_name;
-            }
-            else {
-                new_name = name;
-            }
-
-            //set last one as own child
-            Item.findOneAndUpdate({
-                item_uid: {$eq: uid},
-                item_version: {$eq: found_item.item_version}
-            }, {$set: {item_parent_uid: uid}}, {new: true}, function (err, result) {
-                if (err) {
-                    callback(err)
-                }
-                else {
-                    var new_version = new Item(
-                        {
-                            item_uid: uid,
-                            item_name: new_name,
-                            item_version: result.item_version + 1,
-                            item_parent_uid: new_parent,
-                            item_type: result.item_type
-                        }
-                    );
-
-                    new_version.save(function (err, updated) {
-                        if (err) {
-                            console.log(err);
-                            callback(err);
-                        } else {
-
-                            console.log('Item saved successfully:', updated);
-                            callback(updated);
-                        }
-                    });
-                }
-            });
-        }
-    });
+    // if (old_item.item_uid == old_item.item_parent_uid)
+    // {
+    //     var new_parent = "";
+    //     var new_name = "";
+    // }
+    // else
+    // {
+    //     callback();
+    // }
+        var new_parent = parent_uid;
+        var new_name = name;
+        if (new_parent == null) {new_parent = old_item.item_parent_uid};
+        if (new_name == null) {new_name = old_item.item_name};
+        ff.new_item(old_item.item_uid,new_name,old_item.item_version,new_parent,old_item.item_content,callback);
 };
 
+
+module.exports.set_item_not_last = function (uid,callback) {
+    Item.findOneAndUpdate({
+        item_uid: {$eq: uid}, item_parent_uid :{$ne: uid}
+    }, {$set: {item_parent_uid: uid}},function (err, result) {
+        if (err) {
+            callback(err)
+        }
+        else
+        {
+            callback(result);
+        }
+    });
+
+};
 
 module.exports.set_item_random_name = function(uid,callback) {
     var newName =  generateName();

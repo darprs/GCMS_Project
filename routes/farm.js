@@ -23,7 +23,7 @@ router.get('/clean_setup', function(req, res) {
 router.get('/createRandomRootfolder', function(req, res) {
     console.log(req.url);
     var sillyName = generateName();
-    ff.new_item(sillyName,ff.getrootUID(),0,function(created_item) {
+    ff.new_item(null,sillyName,null,ff.getrootUID(),null,function(created_item) {
         res.render('service', {title: created_item});
     });
 });
@@ -108,13 +108,13 @@ router.get('/:itemUID/sp/:parentUID', function(req, res){
 
 router.get('/:itemUID/cc/:child_name',function (req, res) {
     //console.log(req.params.child_name);
-    ff.new_item(req.params.child_name,req.params.itemUID,null,function (result) {
+    ff.new_item(null,req.params.child_name,null,req.params.itemUID,null,function (result) {
         res.json(result);
     })
 });
 
 router.get('/:itemUID/cc/:child_name/content/:document_content',function (req, res) {
-    ff.new_item(req.params.child_name,req.params.itemUID,req.params.document_content,function (result) {
+    ff.new_item(null,req.params.child_name,null,req.params.itemUID,req.params.document_content,function (result) {
         res.json(result);
     })
 
@@ -130,5 +130,21 @@ router.get('/:itemUID/cc/:child_name/content/:document_content',function (req, r
 //     });
 // });
 
+//set old
+router.get('/:itemUID/so',function (req, res) {
+    ff.set_item_not_last(req.params.itemUID,function (old_item) {
+        res.json(old_item);
+    })
+});
+
+//set existing child
+router.get('/:itemUID/sec/:itemParentUID/:item_version/:child_name/:document_content',function (req, res) {
+    //ff.new_item(null,req.params.child_name,null,req.params.itemUID,req.params.document_content,function (result) {
+        ff.new_item(req.params.itemUID,req.params.child_name,req.params.item_version,req.params.itemParentUID,req.params.document_content,function (result) {
+            res.json(result);
+        });
+    // }
+    //     res.json(result);
+    });
 
 module.exports = router;
