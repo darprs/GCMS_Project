@@ -93,6 +93,7 @@ module.exports.new_item = function (uid ,name,version,parent,content,callback){
         if (content != null ){typ = 1 }
         if (version != null ){ver = 1 }
         if (uid != null) {new_id = uid};
+        console.log("New item properties : " + new_id + "/" + name + "/" + ver + "/" + parent + "/" + typ + "/" + content);
         var testitem = new Item(
             {
                 item_uid:new_id,

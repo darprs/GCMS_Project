@@ -5,7 +5,7 @@ var router = express.Router();
 
 router.get('/', function (req, res) {
     res.render('master',
-        { title : 'GCMS' }
+        { title : app_config.GeoPrefix }
     )
 })
 
